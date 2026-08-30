@@ -41,8 +41,11 @@ def main():
     print(f"Usage:\npython3 {sys.argv[0]} <path/to/image.png> <number of colors> <path/to/output.png>")
     exit(0)
   with Image.open(sys.argv[1]) as image:
-    numColors:int = int(sys.argv[2])
+    image = image.convert(mode="L")
+    numColors:int = int(sys.argv[2])-1
     quantized_image = image.quantize(numColors)
+    quantized_image.save("quantized.png")
+    return
     palette = quantized_image.getpalette()
     colors:list[tuple[int,int,int]] = []
     for i in range(0,len(palette),3):
@@ -55,7 +58,7 @@ def main():
         old_pixel = pixels[x,y]
         new_pixel = find_closest_palette_color(pixels[x,y],colors)
         pixels[x,y] = new_pixel
-        quant_error = get_quant_error(new_pixel,old_pixel)
+        quant_error = get_quant_error(old_pixel,new_pixel)
         if x+1<width:
           pixels[x+1, y  ] = add_tuple(pixels[x+1, y  ], mult_tuple(quant_error,7 / 16))
         if x-1>0 and y+1<height:

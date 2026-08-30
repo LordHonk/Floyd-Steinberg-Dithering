@@ -220,3 +220,6 @@ __marimo__/
 # test data
 *.png
 *.jpg
+
+# editor swap file
+*.kate-swp
